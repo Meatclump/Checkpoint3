@@ -46,6 +46,9 @@ namespace AssetTracking
             return menuOption;
         }
 
+        /// <summary>
+        /// Prints the Create Asset menu header to the console.
+        /// </summary>
         internal static void ShowCreateAssetMenu()
         {
             Console.Clear();
@@ -53,6 +56,15 @@ namespace AssetTracking
             Console.WriteLine("--------------------\n");
         }
 
+        /// <summary>
+        /// Prompts user for new asset information and creates an Asset object.
+        /// </summary>
+        /// <remarks>The method collects details about an asset via the console. If the
+        /// user enters "q" when prompted for the brand name, the method returns null and no asset is created. The
+        /// method validates all input and will loop until valid values are provided.</remarks>
+        /// <param name="offices">A list of available offices to select from when assigning the asset's location.</param>
+        /// <returns>An Asset object containing the user-provided brand, model, price, and selected office. Returns null if the
+        /// user chooses to cancel the operation.</returns>
         internal static Asset GetAssetInput(List<Office> offices)
         {
             // Start by getting and validating the brand name.
@@ -168,6 +180,13 @@ namespace AssetTracking
             return new Asset(brand, model, price, DateTime.Now, officeKey);
         }
 
+        /// <summary>
+        /// Prompts the user to select an asset category and adds the specified asset to the category.
+        /// </summary>
+        /// <remarks>This method displays available categories and reads the user's selection. If the user enters an invalid
+        /// selection, the prompt is repeated until a valid category is chosen.</remarks>
+        /// <param name="asset">The asset to add to a category.</param>
+        /// <param name="assetCategories">The list of available asset categories to choose from.</param>
         internal static void AddAssetToCategory(Asset asset, List<AssetCategory> assetCategories)
         {
             Console.WriteLine("--------------------");
@@ -187,7 +206,7 @@ namespace AssetTracking
                     categoryIndex = int.Parse(categorySelection) - 1;
                     assetCategories[categoryIndex].Assets.Add(asset);
                     Console.Clear();
-                    ShowCreateAssetMenu();
+                    ShowCreateAssetMenu(); // Show the create asset menu header again after screen clear.
                     Console.WriteLine($"Asset \"{asset.Brand}\" added successfully to the {assetCategories[categoryIndex].Name} category!\n");
                 } catch
                 {
