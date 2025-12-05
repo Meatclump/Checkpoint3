@@ -55,6 +55,7 @@ namespace AssetTracking
 
         internal static Asset GetAssetInput(List<Office> offices)
         {
+            // Start by getting and validating the brand name.
             string brand = "";
             bool quit = false;
             bool validBrand = false;
@@ -79,13 +80,62 @@ namespace AssetTracking
                 validBrand = true;
             }
 
+            // If brand name was "q", return null.
             if (quit)
             {
 
                 return null;
             }
 
-            return new Asset(brand, "ModelX", "TypeY", 1000.0, DateTime.Now, offices[0].Id);
+            // Get the model name
+            string model = "";
+            bool validModel = false;
+            Console.Write("Please enter a model name for the new asset: ");
+            while (!validModel)
+            {
+                model = Console.ReadLine();
+                if (model == null)
+                {
+                    Console.Write("Asset model must not be null. Please try again: ");
+                    continue;
+                }
+                if (model.Trim() == "")
+                {
+                    Console.Write("Asset model must not be empty. Please try again: ");
+                    continue;
+                }
+                validModel = true;
+            }
+
+            // Get the 
+
+            return new Asset(brand, model, 1000.0, DateTime.Now, offices[0].Id);
+        }
+
+        internal static void AddAssetToCategory(Asset asset, List<AssetCategory> assetCategories)
+        {
+            for (int i = 0; i < assetCategories.Count; i++)
+            {
+                Console.WriteLine($"{i + 1} - {assetCategories[i].Name}");
+            }
+            Console.Write("Please pick the category number that this asset belongs to: ");
+            bool validSelection = false;
+            int categoryIndex = 0;
+            while (!validSelection)
+            {
+                string categorySelection = Console.ReadLine();
+                try
+                {
+                    categoryIndex = int.Parse(categorySelection) - 1;
+                    assetCategories[categoryIndex].Assets.Add(asset);
+                    Console.WriteLine($"Asset \"{asset.Brand}\" added successfully to the {assetCategories[categoryIndex].Name} category!");
+                } catch
+                {
+                    Console.Write("Invalid input. Please use a numeric value in the category range: ");
+                    continue;
+                }
+                validSelection = true;
+            }
         }
 
         /// <summary>

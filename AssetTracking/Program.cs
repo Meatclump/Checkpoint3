@@ -34,15 +34,15 @@ List <Currency> currencies = new([
 List<AssetCategory> assetCategories = new(
     [
         new AssetCategory("Mobile Phones", [
-            new Asset("Apple", "iPhone 13", "Smartphone", 799.99, new DateTime(2021, 9, 24), "001"),
-            new Asset("Samsung", "Galaxy S21", "Smartphone", 699.99, new DateTime(2025, 1, 29), "003")
+            new Asset("Apple", "iPhone 13", 799.99, new DateTime(2021, 9, 24), "001"),
+            new Asset("Samsung", "Galaxy S21", 699.99, new DateTime(2025, 1, 29), "003")
         ]),
         new AssetCategory("Laptop Computers", [
-            new Asset("Dell", "XPS 13", "Laptop", 999.99, new DateTime(2020, 11, 15), "002"),
-            new Asset("Apple", "MacBook Pro", "Laptop", 1299.99, new DateTime(2026, 5, 21), "001"),
-            new Asset("Lenovo", "ThinkPad X1 Carbon", "Laptop", 1199.99, new DateTime(2022, 3, 10), "004"),
-            new Asset("HP", "Spectre x360", "Laptop", 1099.99, new DateTime(2023, 01, 5), "003"),
-            new Asset("Asus", "ZenBook 14", "Laptop", 899.99, new DateTime(2023, 4, 18), "002"),
+            new Asset("Dell", "XPS 13", 999.99, new DateTime(2020, 11, 15), "002"),
+            new Asset("Apple", "MacBook Pro", 1299.99, new DateTime(2026, 5, 21), "001"),
+            new Asset("Lenovo", "ThinkPad X1 Carbon", 1199.99, new DateTime(2022, 3, 10), "004"),
+            new Asset("HP", "Spectre x360", 1099.99, new DateTime(2023, 01, 5), "003"),
+            new Asset("Asus", "ZenBook 14", 899.99, new DateTime(2023, 4, 18), "002"),
         ]),
     ]
 );
@@ -67,16 +67,7 @@ while (runProgram)
                     addingAssets = false;
                     continue;
                 }
-
-                for (int i = 0; i < assetCategories.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1} - {assetCategories[i].Name}");
-                }
-                Console.Write("Please pick the category number that this asset belongs to: ");
-                string categorySelection = Console.ReadLine();
-                int categoryIndex = int.Parse(categorySelection) - 1;
-                assetCategories[categoryIndex].Assets.Add(result);
-                Console.WriteLine($"Asset \"{result.Brand}\" added successfully to {assetCategories[categoryIndex].Name}!");
+                Controller.AddAssetToCategory(result, assetCategories);
             }
             break;
         case 2:
