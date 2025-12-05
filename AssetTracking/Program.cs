@@ -50,27 +50,46 @@ List<AssetCategory> assetCategories = new(
 bool runProgram = true;
 while (runProgram)
 {
-    UIManager.ShowMainMenu(menuOptions);
-    int selection = UIManager.GetMainMenuSelection();
+    Controller.ShowMainMenu(menuOptions);
+    int selection = Controller.GetMainMenuSelection();
 
     switch (selection)
     {
         case 1:
             // Add New Asset
-            Console.WriteLine("\nAdding a new asset...");
+            Controller.ShowCreateAssetMenu();
+            bool addingAssets = true;
+            while (addingAssets)
+            {
+                Asset result = Controller.GetAssetInput(offices);
+                if (result == null)
+                {
+                    addingAssets = false;
+                    continue;
+                }
+
+                for (int i = 0; i < assetCategories.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1} - {assetCategories[i].Name}");
+                }
+                Console.Write("Please pick the category number that this asset belongs to: ");
+                string categorySelection = Console.ReadLine();
+                int categoryIndex = int.Parse(categorySelection) - 1;
+                assetCategories[categoryIndex].Assets.Add(result);
+                Console.WriteLine($"Asset \"{result.Brand}\" added successfully to {assetCategories[categoryIndex].Name}!");
+            }
             break;
         case 2:
             // View All Assets
-            Console.WriteLine("\nViewing all assets...");
-            UIManager.ShowAssetsMenu(assetCategories, offices, currencies);
+            Controller.ShowAssetsMenu(assetCategories, offices, currencies);
             break;
         case 3:
             // Create Asset Category
-            UIManager.ShowCategoriesMenu(assetCategories);
+            Controller.ShowCategoriesMenu(assetCategories);
             bool addingCategories = true;
             while (addingCategories)
             {
-                AssetCategory result = UIManager.GetCategoryInput();
+                AssetCategory result = Controller.GetCategoryInput();
                 if (result == null)
                 {
                     addingCategories = false;
@@ -78,17 +97,17 @@ while (runProgram)
                 }
                 assetCategories.Add(result);
                 Console.WriteLine($"Category \"{result.Name}\" added successfully!");
-                UIManager.ShowCategoriesMenu(assetCategories);
+                Controller.ShowCategoriesMenu(assetCategories);
             }
             Console.Clear();
             break;
         case 4:
             // Exit Program
-            Console.WriteLine("\nExiting the program. Have a nice day!");
+            Controller.ShowExitMessage();
             runProgram = false;
             break;
         default:
-            // A menu option not in the list was chosen
+            // A menu option out of range was chosen
             Console.WriteLine("\nUnrecognized menu selection.");
             break;
     }

@@ -2,7 +2,7 @@
 
 namespace AssetTracking
 {
-    internal class UIManager()
+    internal class Controller()
     {
         /// <summary>
         /// Displays the main menu to the console using the provided list of menu options.
@@ -44,6 +44,48 @@ namespace AssetTracking
                 }
             }
             return menuOption;
+        }
+
+        internal static void ShowCreateAssetMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Create Asset Menu");
+            Console.WriteLine("--------------------\n");
+        }
+
+        internal static Asset GetAssetInput(List<Office> offices)
+        {
+            string brand = "";
+            bool quit = false;
+            bool validBrand = false;
+            Console.Write("Please enter a brand name for the new asset or \"q\" to return to the main menu: ");
+            while (!validBrand)
+            {
+                brand = Console.ReadLine();
+                if (brand == null)
+                {
+                    Console.Write("Asset brand must not be null. Please try again: ");
+                    continue;
+                }
+                if (brand.Trim() == "")
+                {
+                    Console.Write("Asset brand must not be empty. Please try again: ");
+                    continue;
+                }
+                if (string.Equals(brand, "q"))
+                {
+                    quit = true;
+                }
+                validBrand = true;
+            }
+
+            if (quit)
+            {
+
+                return null;
+            }
+
+            return new Asset(brand, "ModelX", "TypeY", 1000.0, DateTime.Now, offices[0].Id);
         }
 
         /// <summary>
@@ -184,6 +226,11 @@ namespace AssetTracking
                     }
                 }
             }
+        }
+
+        internal static void ShowExitMessage()
+        {
+            Console.WriteLine("Thank you for using the Asset Tracking System. Goodbye!");
         }
 
         /// <summary>
