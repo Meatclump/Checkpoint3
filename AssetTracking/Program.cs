@@ -1,15 +1,6 @@
-﻿/*
-Todo:
-Functionality for creating Assets
-Functionality for viewing Assets
+﻿using AssetTracking;
 
-Maybe:
-Functionality for viewing and setting currency conversion rates
-Functionality for viewing and creating offices
-*/
-
-using AssetTracking;
-
+// Define available main menu options
 List<string> menuOptions = [
         "Add New Asset",
         "View All Assets",
@@ -17,6 +8,7 @@ List<string> menuOptions = [
         "Exit Program"
     ];
 
+// Define available offices and their currency key
 List<Office> offices = new([
         new Office("001", "New York", "USD"),
         new Office("002", "London", "GBP"),
@@ -24,13 +16,15 @@ List<Office> offices = new([
         new Office("004", "Germany", "EUR"),
     ]);
 
-List <Currency> currencies = new([
+// Define available currencies and conversion rates
+List<Currency> currencies = new([
         new Currency("USD", "US Dollar", 1.0),
         new Currency("GBP", "British Pound", 1.25),
         new Currency("SEK", "Swedish Krona", 0.11),
         new Currency("EUR", "Euro", 1.10),
     ]);
 
+// Define some initial asset categories and assets
 List<AssetCategory> assetCategories = new(
     [
         new AssetCategory("Mobile Phones", [
@@ -50,45 +44,46 @@ List<AssetCategory> assetCategories = new(
 bool runProgram = true;
 while (runProgram)
 {
-    Controller.ShowMainMenu(menuOptions);
-    int selection = Controller.GetMainMenuSelection();
+    Controller.ShowMainMenu(menuOptions); // Main menu printout
+    int selection = Controller.GetMainMenuSelection(); // Main menu selection
 
     switch (selection)
     {
         case 1:
             // Add New Asset
-            Controller.ShowCreateAssetMenu();
+            Controller.ShowCreateAssetMenu(); // Create asset menu printout
             bool addingAssets = true;
-            while (addingAssets)
+            while (addingAssets) // Loop to add multiple assets
             {
                 Asset result = Controller.GetAssetInput(offices);
-                if (result == null)
+                if (result == null) // Exit asset creation on null return
                 {
                     addingAssets = false;
                     continue;
                 }
-                Controller.AddAssetToCategory(result, assetCategories);
+                Controller.AddAssetToCategory(result, assetCategories); // Add asset to chosen category
             }
+            Console.Clear();
             break;
         case 2:
             // View All Assets
-            Controller.ShowAssetsMenu(assetCategories, offices, currencies);
+            Controller.ShowAssetsMenu(assetCategories, offices, currencies); // View assets menu printout
             break;
         case 3:
             // Create Asset Category
-            Controller.ShowCategoriesMenu(assetCategories);
+            Controller.ShowCategoriesMenu(assetCategories); // View current categories printout
             bool addingCategories = true;
-            while (addingCategories)
+            while (addingCategories) // Loop to add multiple categories
             {
                 AssetCategory result = Controller.GetCategoryInput();
-                if (result == null)
+                if (result == null) // Exit category creation on null return
                 {
                     addingCategories = false;
                     continue;
                 }
                 assetCategories.Add(result);
                 Console.WriteLine($"Category \"{result.Name}\" added successfully!");
-                Controller.ShowCategoriesMenu(assetCategories);
+                Controller.ShowCategoriesMenu(assetCategories); // Show updated categories
             }
             Console.Clear();
             break;

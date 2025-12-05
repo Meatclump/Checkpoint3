@@ -87,9 +87,10 @@ namespace AssetTracking
                 return null;
             }
 
-            // Get the model name
+            // Get the asset model name
             string model = "";
             bool validModel = false;
+            Console.WriteLine("--------------------");
             Console.Write("Please enter a model name for the new asset: ");
             while (!validModel)
             {
@@ -107,31 +108,90 @@ namespace AssetTracking
                 validModel = true;
             }
 
-            // Get the 
+            // Get the asset price in USD
+            string priceInput = "";
+            double price = 0.0;
+            bool validPrice = false;
+            Console.WriteLine("--------------------");
+            Console.Write("Please enter the purchase price in USD for the asset: ");
+            while (!validPrice)
+            {
+                priceInput = Console.ReadLine();
+                if (priceInput == null)
+                {
+                    Console.Write("Asset price must not be null. Please try again: ");
+                    continue;
+                }
+                if (priceInput.Trim() == "")
+                {
+                    Console.Write("Asset price must not be empty. Please try again: ");
+                    continue;
+                }
+                try
+                {
+                    price = double.Parse(priceInput);
+                }
+                catch
+                {
+                    Console.Write("Invalid input. Please enter a numeric value for the asset price: ");
+                    continue;
+                }
+                validPrice = true;
+            }
 
-            return new Asset(brand, model, 1000.0, DateTime.Now, offices[0].Id);
+            // Get the office for the asset
+            string officeKey = "";
+            bool validOffice = false;
+            Console.WriteLine("--------------------");
+            Console.WriteLine("Please select the office where the asset is located:");
+            for (int i = 0; i < offices.Count; i++)
+            {
+                Console.WriteLine($"{i + 1} - {offices[i].Name}");
+            }
+            while (!validOffice)
+            {
+                Console.Write("Office #: ");
+                string officeSelection = Console.ReadLine();
+                try
+                {
+                    int officeIndex = int.Parse(officeSelection) - 1;
+                    officeKey = offices[officeIndex].Id;
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input. Please use a numeric value to select one of the offices.");
+                    continue;
+                }
+                validOffice = true;
+            }
+
+            return new Asset(brand, model, price, DateTime.Now, officeKey);
         }
 
         internal static void AddAssetToCategory(Asset asset, List<AssetCategory> assetCategories)
         {
+            Console.WriteLine("--------------------");
+            Console.WriteLine("Please pick the category number that this asset belongs to:");
             for (int i = 0; i < assetCategories.Count; i++)
             {
                 Console.WriteLine($"{i + 1} - {assetCategories[i].Name}");
             }
-            Console.Write("Please pick the category number that this asset belongs to: ");
             bool validSelection = false;
             int categoryIndex = 0;
             while (!validSelection)
             {
+                Console.Write("Category #: ");
                 string categorySelection = Console.ReadLine();
                 try
                 {
                     categoryIndex = int.Parse(categorySelection) - 1;
                     assetCategories[categoryIndex].Assets.Add(asset);
-                    Console.WriteLine($"Asset \"{asset.Brand}\" added successfully to the {assetCategories[categoryIndex].Name} category!");
+                    Console.Clear();
+                    ShowCreateAssetMenu();
+                    Console.WriteLine($"Asset \"{asset.Brand}\" added successfully to the {assetCategories[categoryIndex].Name} category!\n");
                 } catch
                 {
-                    Console.Write("Invalid input. Please use a numeric value in the category range: ");
+                    Console.WriteLine("Invalid input. Please use a numeric value in the category range.");
                     continue;
                 }
                 validSelection = true;
